@@ -17,11 +17,20 @@ public class StepTracker {
         }
     }
     void statsMonth(int month){
-        int allSteps = 0;
+        getDaySteps(stepMonth.get(month),getAllSteps(stepMonth.get(month)));
+        System.out.println("В этом месяце пройдено " + getAllSteps(stepMonth.get(month)) + " шагов.");
+        middleSteps(getAllSteps(stepMonth.get(month)),stepMonth.get(month));
+        System.out.println("Пройденно " + converter.distanceSteps(getAllSteps(stepMonth.get(month))) + " км.");
+        System.out.println("Кол-во сожженых килокалорий составляет " + converter.kKal(getAllSteps(stepMonth.get(month))));
+        niceSeries(stepMonth.get(month),limitSteps);
+
+    }
+    void newLimitSteps (int steps) {
+        limitSteps = steps;
+    }
+
+    public void getDaySteps(int [] stepsByDay, int allSteps){
         int maxSteps = 0;
-        int maxSeries = 0;
-        int max =0;
-        int[] stepsByDay = stepMonth.get(month);
         for (int i = 0; i < stepsByDay.length; i++){
             allSteps += stepsByDay[i];
             if (maxSteps < stepsByDay[i]){
@@ -30,12 +39,25 @@ public class StepTracker {
             System.out.print( (i+1) +" день: " + stepsByDay[i] + " ,");
         }
         System.out.println(".");
-        System.out.println("В этом месяце пройдено " + allSteps + " шагов.");
+        System.out.println("Максимальное кол-во шагов в день в этом месяце " + maxSteps);
+    }
+
+    public int getAllSteps(int [] stepsByDay){
+        int allSteps = 0;
+        for (int i = 0; i < stepsByDay.length; i++) {
+            allSteps += stepsByDay[i];
+        }
+        return allSteps;
+    }
+    public void middleSteps(int allSteps,int [] stepsByDay){
         int middleSteps =  allSteps /stepsByDay.length;
         System.out.println("Средне кол-во шагов в день: " + middleSteps);
-        System.out.println("Пройденно " + converter.distanceSteps(allSteps) + " км.");
-        System.out.println("Кол-во сожженых килокалорий составляет " + converter.kKal(allSteps));
-        for (int i = 0; i < stepsByDay.length; i++){
+    }
+
+    public void niceSeries(int [] stepsByDay, int limitSteps){
+        int maxSeries = 0;
+        int max =0;
+        for (int i =0 ; i < stepsByDay.length ; i++){
             if (stepsByDay[i] >= limitSteps){
                 max+=1;
             }
@@ -45,9 +67,5 @@ public class StepTracker {
             }
         }
         System.out.println("Лучшая серия " + maxSeries + " дня(-ей).");
-
-    }
-    void newLimitSteps (int steps) {
-        limitSteps = steps;
     }
 }
